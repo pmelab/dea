@@ -7,7 +7,7 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
-class GrantDiscovery extends DefaultPluginManager {
+class GrantDiscovery extends DefaultPluginManager implements GrantDiscoveryInterface {
 
   /**
    * @var GrantDiscoveryInterface[]

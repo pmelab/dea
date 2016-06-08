@@ -1,10 +1,6 @@
 <?php
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Routing\RouteMatch;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Symfony\Component\Routing\Route;
-use Drupal\dea_request\Routing\RequestableRouteEnhancer;
+use Drupal\dea_request\Entity\AccessRequest;
 
 /**
  * Implements hook_entity_operation().
@@ -13,13 +9,28 @@ use Drupal\dea_request\Routing\RequestableRouteEnhancer;
 function dea_request_entity_operation(EntityInterface $entity) {
   $operations = [];
   if ($entity->getEntityTypeId() == 'dea_request') {
-    $operations['accept'] = [
-      'title' => t('Accept'),
-      'url' => $entity->urlInfo('accept'),
-    ];
-    $operations['deny'] = [
-      'title' => t('Deny'),
-      'url' => $entity->urlInfo('deny'),
+    
+    if ($entity->getStatus() != AccessRequest::ACCEPTED) {
+      $operations['accept'] = [
+        'title' => t('Accept'),
+        'url' => $entity->urlInfo('accept'),
+      ];
+    }
+
+    if ($entity->getStatus() != AccessRequest::DENIED) {
+      $operations['deny'] = [
+        'title' => t('Deny'),
+        'url' => $entity->urlInfo('deny'),
+      ];
+    }
+
+    if ($entity->getStatus() == AccessRequest::ACCEPTED) {
+      $operations['deny']['title'] = t('Revoke');
+    }
+    
+    $operations['delete'] = [
+      'title' => t('Delete'),
+      'url' => $entity->urlInfo('delete'),
     ];
   }
   return $operations;

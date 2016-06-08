@@ -20,14 +20,15 @@ use Drupal\dea\Annotation\SolutionDiscovery;
 use Drupal\Core\Annotation\Translation;
 
 /**
- * List parent terms of terms with matching operations as solutions.
+ * Add a term related to the user to the possible solutions, if a parent term
+ * matches the operation.
  * 
  * @SolutionDiscovery(
- *   id = "parent_term_solution",
- *   label = @Translation("Parents of related terms solution")
+ *   id = "child_term_solution",
+ *   label = @Translation("Childs of related terms solution")
  * )
  */
-class ParentTermSolutionDiscovery extends PluginBase implements ContainerFactoryPluginInterface, SolutionDiscoveryInterface {
+class ChildTermSolutionDiscovery extends PluginBase implements ContainerFactoryPluginInterface, SolutionDiscoveryInterface {
   /**
    * @var OperationReferenceScanner
    */
@@ -63,17 +64,19 @@ class ParentTermSolutionDiscovery extends PluginBase implements ContainerFactory
     foreach ($this->scanner->operationReferences($entity, $entity) as $reference) {
       if ($reference instanceof Term) {
         foreach (\Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($reference->id()) as $parent) {
-          foreach ($this->scanner->operationReferenceFields($user) as $field) {
-            $target_type = $field->getFieldStorageDefinition()->getSetting('target_type');
-            $target_bundles = $field->getSetting('handler_settings')['target_bundles'];
-            if ($parent->getEntityTypeId() == $target_type && in_array($parent->bundle(), $target_bundles)) {
-              $key = implode(':', [
-                $this->getPluginId(),
-                $parent->getEntityTypeId(),
-                $parent->id(),
-                $field->getName()
-              ]);
-              $solutions[$key] = new EntityReferenceSolution($user, $parent, $field);
+          if ($this->scanner->providesGrant($parent, $entity, $operation)) {
+            foreach ($this->scanner->operationReferenceFields($user) as $field) {
+              $target_type = $field->getFieldStorageDefinition()->getSetting('target_type');
+              $target_bundles = $field->getSetting('handler_settings')['target_bundles'];
+              if ($reference->getEntityTypeId() == $target_type && in_array($reference->bundle(), $target_bundles)) {
+                $key = implode(':', [
+                  $this->getPluginId(),
+                  $reference->getEntityTypeId(),
+                  $reference->id(),
+                  $field->getName()
+                ]);
+                $solutions[$key] = new EntityReferenceSolution($user, $reference, $field);
+              }
             }
           }
         }
@@ -81,5 +84,20 @@ class ParentTermSolutionDiscovery extends PluginBase implements ContainerFactory
     }
 
     return $solutions;
+  }
+
+  public function children(Term $term) {
+    $children = \Drupal::entityManager()
+      ->getStorage('taxonomy_term')
+      ->loadChildren($term->id());
+
+    $result = $children;
+
+    foreach ($children as $child) {
+      $sub_children = $this->children($child);
+      $result = array_merge($result, $sub_children);
+    }
+
+    return $result;
   }
 }

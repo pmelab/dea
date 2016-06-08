@@ -19,6 +19,9 @@ use Drupal\Core\Entity\EntityInterface;
 
 
 /**
+ * Adds all related entities with a matching operation field to the list
+ * of grants of a user.
+ * 
  * @GrantDiscovery(
  *   id = "entity_reference_grants",
  *   label = @Translation("Referenced grants")

@@ -58,12 +58,7 @@ class AccessRequestListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildOperations(EntityInterface $entity) {
-    if ($entity->getStatus() == AccessRequest::OPEN) {
-      return parent::buildOperations($entity);
-    }
-    else {
-      return [];
-    }
+    return parent::buildOperations($entity);
   }
 
 }

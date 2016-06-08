@@ -42,7 +42,7 @@ class EntityReferenceSolution implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function __toString() {
+  public function applyDescription() {
     return t('Add %target to %user\'s %field.', [
       '%user' => $this->account->label(),
       '%target' => $this->target->label(),
@@ -53,8 +53,36 @@ class EntityReferenceSolution implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
+  public function revokeDescription() {
+    return t('Remove %target from %user\'s %field.', [
+      '%user' => $this->account->label(),
+      '%target' => $this->target->label(),
+      '%field' => $this->field->getLabel(),
+    ])->render();
+  }
+
+  public function isApplied() {
+    return in_array($this->target, $this->account->get($this->field->getName())->referencedEntities());
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function apply() {
     $this->account->{$this->field->getName()}[] = $this->target;
+    $this->account->save();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function revoke() {
+    $items = $this->account->{$this->field->getName()}->getValue();
+    $this->account->{$this->field->getName()} = array_filter($items, function ($item) {
+      return $this->target->id() != $item['target_id'];
+    });
+    
     $this->account->save();
   }
 

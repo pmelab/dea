@@ -6,7 +6,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Entity\EntityInterface;
 
-class RequirementDiscovery extends DefaultPluginManager {
+class RequirementDiscovery extends DefaultPluginManager implements RequirementDiscoveryInterface{
 
   /**
    * @var RequirementDiscoveryInterface[]

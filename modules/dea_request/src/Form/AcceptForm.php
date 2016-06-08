@@ -10,6 +10,7 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\dea\SolutionInterface;
 use Drupal\dea_request\Entity\AccessRequest;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
@@ -39,15 +40,21 @@ class AcceptForm extends ContentEntityForm {
       $container->get('dea.discovery.solution')
     );
   }
+  
   /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
+    $builder = \Drupal::entityTypeManager()->getViewBuilder('dea_request');
+    $form['entity'] = $builder->view($this->entity, 'summary');
+    
     $form['solutions'] = [
       '#type' => 'radios',
       '#title' => $this->t('Choose one or more solutions:'),
-      '#options' => $this->allSolutions(),
+      '#options' => array_map(function (SolutionInterface $solution) {
+        return $solution->applyDescription();
+      }, $this->allSolutions()),
       '#required' => TRUE,
     ];
     return $form;

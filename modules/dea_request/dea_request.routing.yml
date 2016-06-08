@@ -21,6 +21,8 @@ entity.dea_request.canonical:
     _title: 'Access request'
   requirements:
     _permission: 'administer users'
+    _entity_access: 'dea_request.view'
+    dea_request: \d+
 
 entity.dea_request.accept:
   path: '/admin/content/dea_requests/{dea_request}/accept'
@@ -29,6 +31,8 @@ entity.dea_request.accept:
     _title: 'Accept access request'
   requirements:
     _permission: 'administer users'
+    _entity_access: 'dea_request.accept'
+    dea_request: \d+
 
 entity.dea_request.deny:
   path: '/admin/content/dea_requests/{dea_request}/deny'
@@ -37,6 +41,18 @@ entity.dea_request.deny:
     _title: 'Deny access request'
   requirements:
     _permission: 'administer users'
+    _entity_access: 'dea_request.deny'
+    dea_request: \d+
+
+entity.dea_request.delete:
+  path: '/admin/content/dea_requests/{dea_request}/delete'
+  defaults:
+    _entity_form: 'dea_request.delete'
+    _title: 'Delete access request'
+  requirements:
+    _permission: 'administer users'
+    _entity_access: 'dea_request.delete'
+    dea_request: \d+
 
 
 dea_request.settings:

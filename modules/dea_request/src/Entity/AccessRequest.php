@@ -26,6 +26,7 @@ use Drupal\user\Entity\User;
  *       "request" = "Drupal\dea_request\Form\RequestForm",
  *       "accept" = "Drupal\dea_request\Form\AcceptForm",
  *       "deny" = "Drupal\dea_request\Form\DenyForm",
+ *       "delete" = "Drupal\dea_request\Form\DeleteForm",
  *     },
  *     "access" = "Drupal\dea_request\Entity\AccessRequestAccessControlHandler",
  *   },
@@ -41,6 +42,7 @@ use Drupal\user\Entity\User;
  *     "canonical" = "/admin/content/dea_requests/request/{dea_request}",
  *     "accept" = "/admin/content/dea_requests/{dea_request}/accept",
  *     "deny" = "/admin/content/dea_requests/{dea_request}/deny",
+ *     "delete" = "/admin/content/dea_requests/{dea_request}/delete",
  *     "list" = "/admin/content/dea_requests",
  *   },
  *   field_ui_base_route = "dea_request.settings",
@@ -67,7 +69,11 @@ class AccessRequest extends ContentEntityBase {
   }
 
   public function getOwner() {
-    return User::load($this->values['uid']);
+    return User::load($this->get('uid')->first()->getValue()['target_id']);
+  }
+  
+  public function getOperation() {
+    $this->get('operation')->first()->getValue()['value'];
   }
 
   public function setTarget(EntityInterface $entity) {

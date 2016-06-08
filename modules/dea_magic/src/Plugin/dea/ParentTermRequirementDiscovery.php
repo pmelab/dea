@@ -1,32 +1,26 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Plugin\dea\EntityReferenceRequirementsDiscovery.
- */
 namespace Drupal\dea_magic\Plugin\dea;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Plugin\PluginBase;
-use Drupal\Core\Annotation\Translation;
-use Drupal\dea\Annotation\RequirementDiscovery;
-use Drupal\dea_magic\OperationReferenceScanner;
 use Drupal\dea\RequirementDiscoveryInterface;
+use Drupal\dea_magic\OperationReferenceScanner;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\views\Plugin\views\PluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Adds all related entities with a matching operation field to the list
- * of requirements of a target.
+ * Add a term to an operations requirements if a parent matches this operation.
+ * Operation definition inheritance between terms.
  * 
  * @RequirementDiscovery(
- *   id = "entity_reference_requirements",
- *   label = @Translation("Referenced requirements")
+ *   id = "parent_term_requirements",
+ *   label = @Translation("Parent term requirements")
  * )
  */
-class EntityReferenceRequirementDiscovery extends PluginBase implements RequirementDiscoveryInterface, ContainerFactoryPluginInterface {
-
+class ParentTermRequirementDiscovery extends PluginBase implements ContainerFactoryPluginInterface, RequirementDiscoveryInterface {
   /**
-   * @var \Drupal\dea_magic\OperationReferenceScanner
+   * @var OperationReferenceScanner
    */
   protected $scanner;
 
@@ -49,13 +43,16 @@ class EntityReferenceRequirementDiscovery extends PluginBase implements Requirem
    * {@inheritdoc}
    */
   public function requirements(EntityInterface $subject, EntityInterface $target, $operation) {
-    $entities = [];
-    foreach ($this->scanner->operationReferences($subject, $target, $operation) as $reference) {
-      $entities[] = $reference;
+    $requirements = [];
+    foreach ($this->scanner->operationReferences($subject, $target) as $reference) {
+      if ($reference instanceof Term) {
+        foreach (\Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($reference->id()) as $parent) {
+          if ($this->scanner->providesGrant($parent, $target, $operation)) {
+            $requirements[] = $reference;
+          }
+        }
+      }
     }
-    return $entities;
+    return $requirements;
   }
-
 }
-
-

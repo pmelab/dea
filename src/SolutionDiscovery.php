@@ -7,8 +7,7 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
-class SolutionDiscovery extends DefaultPluginManager {
-
+class SolutionDiscovery extends DefaultPluginManager implements SolutionDiscoveryInterface {
   /**
    * @var SolutionDiscoveryInterface[]
    */
