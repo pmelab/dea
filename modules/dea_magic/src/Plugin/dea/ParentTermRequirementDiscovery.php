@@ -48,7 +48,7 @@ class ParentTermRequirementDiscovery extends PluginBase implements ContainerFact
       if ($reference instanceof Term) {
         foreach (\Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($reference->id()) as $parent) {
           if ($this->scanner->providesGrant($parent, $target, $operation)) {
-            $requirements[] = $parent;
+            $requirements[] = $reference;
           }
         }
       }
