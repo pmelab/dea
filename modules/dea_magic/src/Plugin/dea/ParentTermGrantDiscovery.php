@@ -60,7 +60,7 @@ class ParentTermGrantDiscovery extends PluginBase implements ContainerFactoryPlu
         if ($reference instanceof Term) {
           foreach (\Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($reference->id()) as $parent) {
             if ($this->scanner->providesGrant($parent, $target, $operation)) {
-              $grants[] = $parent;
+              $grants[] = $reference;
             }
           }
         }

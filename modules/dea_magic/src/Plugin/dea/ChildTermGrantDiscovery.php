@@ -55,15 +55,17 @@ class ChildTermGrantDiscovery extends PluginBase implements ContainerFactoryPlug
     $user = User::load($subject->id());
     if ($user instanceof User) {
       foreach ($this->scanner->operationReferences($user) as $term) {
+        $parent_grant = $this->scanner->providesGrant($term, $target, $operation);
         if ($term instanceof Term) {
           foreach ($this->children($term) as $child) {
-            if ($this->scanner->providesGrant($child, $target, $operation)) {
+            if ($this->scanner->providesGrant($child, $target, $operation) || $parent_grant) {
               $grants[] = $child;
             }
           }
         }
       }
     }
+    
     return $grants;
   }
 
