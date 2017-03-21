@@ -38,6 +38,12 @@ class EntityReferenceSolution implements SolutionInterface {
     $this->field = $field;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  function __toString() {
+    return $this->applyDescription();
+  }
 
   /**
    * {@inheritdoc}
@@ -82,7 +88,6 @@ class EntityReferenceSolution implements SolutionInterface {
     $this->account->{$this->field->getName()} = array_filter($items, function ($item) {
       return $this->target->id() != $item['target_id'];
     });
-    
     $this->account->save();
   }
 

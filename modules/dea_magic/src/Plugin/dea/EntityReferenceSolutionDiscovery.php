@@ -62,11 +62,11 @@ class EntityReferenceSolutionDiscovery extends PluginBase implements SolutionDis
         $target_type = $field->getFieldStorageDefinition()->getSetting('target_type');
         $target_bundles = $field->getSetting('handler_settings')['target_bundles'];
         if ($reference->getEntityTypeId() == $target_type && in_array($reference->bundle(), $target_bundles)) {
-          $key = implode(':',[
+          $key = implode(':', [
             $this->getPluginId(),
             $reference->getEntityTypeId(),
             $reference->id(),
-            $field->getName()
+            $field->getName(),
           ]);
           $solutions[$key] = new EntityReferenceSolution($user, $reference, $field);
         }

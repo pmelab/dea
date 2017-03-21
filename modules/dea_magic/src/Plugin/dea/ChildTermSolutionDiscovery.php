@@ -73,7 +73,7 @@ class ChildTermSolutionDiscovery extends PluginBase implements ContainerFactoryP
                   $this->getPluginId(),
                   $reference->getEntityTypeId(),
                   $reference->id(),
-                  $field->getName()
+                  $field->getName(),
                 ]);
                 $solutions[$key] = new EntityReferenceSolution($user, $reference, $field);
               }

@@ -39,10 +39,11 @@ class SolutionDiscovery extends DefaultPluginManager implements SolutionDiscover
     foreach ($this->discoveries as $discovery) {
       foreach ($discovery->solutions($subject, $account, $operation) as $solution) {
         if (!in_array($solution, $solutions)) {
-          $solutions[] = $solution;
+          $key = $solution->__toString();
+          $solutions[$key] = $solution;
         }
       }
     }
-    return $solutions;
+    return array_unique($solutions);
   }
 }

@@ -6,7 +6,13 @@
 
 namespace Drupal\dea;
 
+
 interface SolutionInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __toString();
 
   /**
    * Check if this solution is already applied.

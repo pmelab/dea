@@ -63,6 +63,9 @@ class ParentTermSolutionDiscovery extends PluginBase implements ContainerFactory
     foreach ($this->scanner->operationReferences($entity, $entity) as $reference) {
       if ($reference instanceof Term) {
         foreach (\Drupal::entityManager()->getStorage('taxonomy_term')->loadAllParents($reference->id()) as $parent) {
+          if (!$this->scanner->providesGrant($parent, $entity, $operation)) {
+            continue;
+          }
           foreach ($this->scanner->operationReferenceFields($user) as $field) {
             $target_type = $field->getFieldStorageDefinition()->getSetting('target_type');
             $target_bundles = $field->getSetting('handler_settings')['target_bundles'];
