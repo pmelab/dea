@@ -18,6 +18,8 @@ class TaxonomyAccessTest extends KernelTestBase {
   /**
    * The admin group.
    *
+   * Has *view* and *edit* access for all nodes.
+   *
    * @var \Drupal\taxonomy\Entity\Term
    */
   protected $groupAdmin;
@@ -110,6 +112,7 @@ class TaxonomyAccessTest extends KernelTestBase {
       ->grantPermission('access content')
       ->save();
 
+    // Create the admin group. Grants view and edit access to articles.
     $this->groupAdmin = Term::create([
       'name' => 'Admin',
       'vid' => 'tags',
@@ -128,6 +131,8 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->groupAdmin->save();
 
+    // Create the root group. Will not be attached to any users or nodes, but
+    // pass it's `field_access_control` values to sub-groups.
     $this->groupRoot = Term::create([
       'name' => 'Root',
       'vid' => 'tags',
@@ -141,6 +146,8 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->groupRoot->save();
 
+    // Create group a, which will grant read access for node A by inheriting
+    // root groups access control settings.
     $this->groupA = Term::create([
       'name' => 'Group A',
       'vid' => 'tags',
@@ -148,6 +155,8 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->groupA->save();
 
+    // Create group a, which will grant read access for node B by inheriting
+    // root groups access control settings.
     $this->groupB = Term::create([
       'name' => 'Group B',
       'vid' => 'tags',
@@ -155,6 +164,7 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->groupB->save();
 
+    // Root user with view and edit rights for all nodes.
     $this->userRoot = User::create([
       'uid' => 2,
       'name' => 'Root User',
@@ -166,6 +176,7 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->userRoot->save();
 
+    // This user is allowed to view node A.
     $this->userA = User::create([
       'uid' => 3,
       'name' => 'User A',
@@ -177,6 +188,7 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->userA->save();
 
+    // This user is allowed to view node B.
     $this->userB = User::create([
       'uid' => 4,
       'name' => 'User B',
@@ -188,6 +200,7 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->userB->save();
 
+    // Node A - viewable by group A and admins only.
     $this->nodeA = Node::create([
       'title'     => 'Node A',
       'type'      => 'article',
@@ -199,6 +212,7 @@ class TaxonomyAccessTest extends KernelTestBase {
     ]);
     $this->nodeA->save();
 
+    // Node B - viewable by group B and admins only.
     $this->nodeB = Node::create([
       'title'     => 'Node B',
       'type'      => 'article',
@@ -228,16 +242,19 @@ class TaxonomyAccessTest extends KernelTestBase {
    * Test inital access permissions.
    */
   public function testInitialAccess() {
+    // Root user is allowed to view and edit everything.
     $this->assertTrue($this->nodeA->access('view', $this->userRoot), 'Root user is able to view node A.');
     $this->assertTrue($this->nodeB->access('view', $this->userRoot), 'Root user is able to view node B.');
     $this->assertTrue($this->nodeA->access('edit', $this->userRoot), 'Root user is able to edit node A.');
     $this->assertTrue($this->nodeB->access('edit', $this->userRoot), 'Root user is able to edit node B.');
 
+    // User A is only allowed to view node A.
     $this->assertTrue($this->nodeA->access('view', $this->userA), 'User A is able to view node A.');
     $this->assertFalse($this->nodeB->access('view', $this->userA), 'User A is not able to view node B.');
     $this->assertFalse($this->nodeA->access('edit', $this->userA), 'User A is not able to edit node A.');
     $this->assertFalse($this->nodeB->access('edit', $this->userA), 'User A is not able to edit node B.');
 
+    // User B is only allowed to view node B.
     $this->assertFalse($this->nodeA->access('view', $this->userB), 'User B is not able to view node A.');
     $this->assertTrue($this->nodeB->access('view', $this->userB), 'User B is able to view node B.');
     $this->assertFalse($this->nodeA->access('edit', $this->userB), 'User B is not able to edit node A.');
@@ -246,6 +263,9 @@ class TaxonomyAccessTest extends KernelTestBase {
 
   /**
    * Test automatic access solutions.
+   *
+   * Based on requirements and grants the system is able to search for solutions
+   * on how to grant or revoke access to certain resources.
    */
   public function testSolutionDiscovery() {
     /** @var \Drupal\dea\SolutionDiscoveryInterface $solution_manager */
@@ -255,6 +275,10 @@ class TaxonomyAccessTest extends KernelTestBase {
     $field_storage = $this->container->get('entity_type.manager')->getStorage('field_config');
     $tags_field = $field_storage->load('user.user.field_tags');
 
+    // There are 3 ways for User A to gain view access for node B.
+    // - Become member of group B.
+    // - Become member of group Root.
+    // - Become admin.
     $view_expected = $this->solutionDescriptions([
       new EntityReferenceSolution($this->userA, $this->groupB, $tags_field),
       new EntityReferenceSolution($this->userA, $this->groupRoot, $tags_field),
@@ -263,6 +287,7 @@ class TaxonomyAccessTest extends KernelTestBase {
     $view = $this->solutionDescriptions($solution_manager->solutions($this->nodeB, $this->userA, 'view'));
     $this->assertEquals($view_expected, $view, 'There are three solutions to give user A view access to node B.');
 
+    // The only way to get write access is by becoming admin.
     $edit_expected = $this->solutionDescriptions([
       new EntityReferenceSolution($this->userA, $this->groupAdmin, $tags_field),
     ]);
@@ -277,9 +302,11 @@ class TaxonomyAccessTest extends KernelTestBase {
     /** @var \Drupal\field\FieldStorageConfigStorage $field_storage */
     $field_storage = $this->container->get('entity_type.manager')->getStorage('field_config');
     $tags_field = $field_storage->load('user.user.field_tags');
-    $solution = new EntityReferenceSolution($this->userA, $this->groupB, $tags_field);
 
+    // Create a "Add user A to group B"-solution and apply it.
+    $solution = new EntityReferenceSolution($this->userA, $this->groupB, $tags_field);
     $solution->apply();
+
     $this->assertTrue($this->nodeB->access('view', $this->userA), 'View access of node B granted to user A.');
   }
 
@@ -290,9 +317,11 @@ class TaxonomyAccessTest extends KernelTestBase {
     /** @var \Drupal\field\FieldStorageConfigStorage $field_storage */
     $field_storage = $this->container->get('entity_type.manager')->getStorage('field_config');
     $tags_field = $field_storage->load('user.user.field_tags');
-    $solution = new EntityReferenceSolution($this->userA, $this->groupA, $tags_field);
 
+    // Create a "Add user A to group A"-solution and revoke it.
+    $solution = new EntityReferenceSolution($this->userA, $this->groupA, $tags_field);
     $solution->revoke();
+
     $this->assertFalse($this->nodeA->access('edit', $this->userA), 'View access of node A revoked from user A.');
   }
 
