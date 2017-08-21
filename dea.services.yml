@@ -10,6 +10,7 @@ services:
     arguments:
     - '@dea.discovery.requirement'
     - '@dea.discovery.grant'
+    - '@config.factory'
 
   dea.discovery.requirement:
     class: Drupal\dea\RequirementDiscovery
