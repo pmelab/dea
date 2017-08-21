@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_magic\EntityReferenceSolution.
- */
 
 namespace Drupal\dea_magic;
 

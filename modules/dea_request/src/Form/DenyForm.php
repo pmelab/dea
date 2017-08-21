@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_request\Form\DenyForm.
- */
 
 namespace Drupal\dea_request\Form;
 

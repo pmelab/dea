@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\GrantDiscoveryInterface.
- */
 
 namespace Drupal\dea;
 

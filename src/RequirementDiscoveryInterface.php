@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\RequirementDiscoveryInterface.
- */
 
 namespace Drupal\dea;
 

@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Plugin\Field\FieldType\OperationItem.
- */
 
 namespace Drupal\dea\Plugin\Field\FieldType;
 

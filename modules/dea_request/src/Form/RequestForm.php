@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_request\Form\RequestForm.
- */
 
 namespace Drupal\dea_request\Form;
 

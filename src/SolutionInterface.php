@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\SolutionInterface.
- */
 
 namespace Drupal\dea;
 

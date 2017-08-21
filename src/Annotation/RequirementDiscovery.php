@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Annotation\RequirementDiscovery.
- */
 
 namespace Drupal\dea\Annotation;
 

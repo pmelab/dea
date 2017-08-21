@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\EntityOperationManager.
- */
 
 namespace Drupal\dea;
 use Drupal\Core\Plugin\Discovery\YamlDiscovery;

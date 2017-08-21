@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_magic\Plugin\dea\ChildTermSolutionDiscovery.
- */
 
 namespace Drupal\dea_magic\Plugin\dea;
 

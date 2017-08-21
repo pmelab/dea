@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_access\Form\SettingsForm.
- */
 
 namespace Drupal\dea_request\Form;
 

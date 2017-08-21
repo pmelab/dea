@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Plugin\Field\FieldFormatter\EntityOperationFieldFormatter.
- */
 
 namespace Drupal\dea\Plugin\Field\FieldFormatter;
 

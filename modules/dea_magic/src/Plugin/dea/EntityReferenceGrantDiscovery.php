@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Plugin\dea\EntityReferenceGrantDiscovery.
- */
 
 namespace Drupal\dea_magic\Plugin\dea;
 

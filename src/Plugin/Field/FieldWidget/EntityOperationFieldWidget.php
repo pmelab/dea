@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Plugin\Field\FieldWidget\EntityOperationFieldWidget.
- */
 
 namespace Drupal\dea\Plugin\Field\FieldWidget;
 

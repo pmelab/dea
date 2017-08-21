@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\SolutionDiscoveryInterface.
- */
 
 namespace Drupal\dea;
 

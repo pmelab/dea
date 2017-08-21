@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Annotation\SolutionDiscovery.
- */
 
 namespace Drupal\dea\Annotation;
 

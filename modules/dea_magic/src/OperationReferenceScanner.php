@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_magic\OperationReferenceScan.
- */
 
 namespace Drupal\dea_magic;
 

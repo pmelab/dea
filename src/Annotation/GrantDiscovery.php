@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Annotation\GrantsDiscovery.
- */
 
 namespace Drupal\dea\Annotation;
 

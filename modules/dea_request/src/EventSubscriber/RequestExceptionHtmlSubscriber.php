@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_request\EventSubscriber\RequestExceptionHtmlSubscriber.
- */
 
 namespace Drupal\dea_request\EventSubscriber;
 

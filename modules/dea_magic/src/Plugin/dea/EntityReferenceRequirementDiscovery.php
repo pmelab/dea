@@ -1,8 +1,5 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea\Plugin\dea\EntityReferenceRequirementsDiscovery.
- */
+
 namespace Drupal\dea_magic\Plugin\dea;
 
 use Drupal\Core\Entity\EntityInterface;

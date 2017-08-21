@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\dea_request\Entity\AccessRequestAccessControlHandler.
- */
 
 namespace Drupal\dea_request\Entity;
 
