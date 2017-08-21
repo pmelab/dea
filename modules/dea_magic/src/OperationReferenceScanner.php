@@ -56,12 +56,21 @@ class OperationReferenceScanner {
       }
 
       $handler_settings = $definition->getSetting('handler_settings');
-      if (!$handler_settings || !array_key_exists('target_bundles', $handler_settings)) {
+      if (!$handler_settings) {
         continue;
       }
 
+      // Entity reference fields can use different handlers
+      if (array_key_exists('target_bundles', $handler_settings)) {
+        $target_bundles = $handler_settings['target_bundles'];
+      } elseif (array_key_exists('view', $handler_settings) && array_key_exists('auto_create_bundle', $handler_settings)) {
+        // If the field is configured to use the View handler, use the auto_create_bundle property
+        $target_bundles = array($handler_settings['auto_create_bundle'] => $handler_settings['auto_create_bundle']);
+      } else {
+       continue;
+      }
+
       $target_type = $definition->getFieldStorageDefinition()->getSetting('target_type');
-      $target_bundles = $handler_settings['target_bundles'];
 
       if (!array_key_exists($target_type, $operation_fields)) {
         continue;
