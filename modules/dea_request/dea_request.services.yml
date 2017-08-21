@@ -5,14 +5,14 @@ services:
     tags:
       - { name: event_subscriber }
     arguments:
-    - @http_kernel
-    - @logger.channel.php
-    - @redirect.destination
-    - @router.no_access_checks
-    - @current_user
-    - @current_route_match
-    - @dea.discovery.requirement
-    - @redirect.destination
+    - '@http_kernel'
+    - '@logger.channel.php'
+    - '@redirect.destination'
+    - '@router.no_access_checks'
+    - '@current_user'
+    - '@current_route_match'
+    - '@dea.discovery.requirement'
+    - '@redirect.destination'
 
   route_enhancer.requestable_entity:
     class: Drupal\dea_request\Routing\RequestableEntityRouteEnhancer
@@ -27,7 +27,7 @@ services:
   dea_request.link_marker:
     class: Drupal\dea_request\RequestableLinkMarker
     arguments:
-    - @router.dynamic
-    - @router.route_provider
-    - @request_stack
+    - '@router.dynamic'
+    - '@router.route_provider'
+    - '@request_stack'
     parent: container.trait

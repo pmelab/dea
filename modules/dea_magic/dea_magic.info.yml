@@ -1,4 +1,4 @@
-name: DEA: Magic
+name: "DEA: Magic"
 type: module
 description: 'Magically finds grant and requirement relations (via entity references).'
 package: Access Control

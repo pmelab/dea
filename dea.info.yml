@@ -1,4 +1,4 @@
-name: DEA: Dynamic entity access
+name: "DEA: Dynamic Entity access"
 type: module
 description: 'Control users access to entities by entity references.'
 package: Access Control
