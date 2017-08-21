@@ -56,6 +56,11 @@ class EntityAccessManager {
    * {@inheritdoc}
    */
   public function access(EntityInterface $entity, $operation, AccountInterface $account) {
+    // If the user has permission, ignore DEA access check.
+    if ($account->hasPermission('bypass dea access check')) {
+      return AccessResult::neutral();
+    }
+
     // Build a list of requirement strings from entity requirements.
     $requirements = array_map(function (EntityInterface $entity) {
       return $entity->getEntityTypeId() . ':' . $entity->id();
