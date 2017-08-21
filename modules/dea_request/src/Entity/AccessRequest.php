@@ -125,9 +125,9 @@ class AccessRequest extends ContentEntityBase {
       ->setDescription(t('The name of the requesting user.'))
       ->setSetting('target_type', 'user');
 
-    $fields['path'] = BaseFieldDefinition::create('string')
+    $fields['request_path'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Request'))
-      ->setDescription(t('The destination path the user tried to access.'))
+      ->setDescription(t('The destination request path the user tried to access.'))
       ->setSettings(array(
         'default_value' => '',
         'max_length' => 255,

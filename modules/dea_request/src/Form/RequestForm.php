@@ -54,7 +54,7 @@ class RequestForm extends ContentEntityForm {
     $request = $this->getRequest();
     $path = [];
     if ($destination = $request->get('destination')) {
-      $path['path'] = substr($destination, strlen($request->getBasePath()) + 1);
+      $path['request_path'] = substr($destination, strlen($request->getBasePath()) + 1);
     }
 
     $result = \Drupal::entityQuery('dea_request')
@@ -92,7 +92,7 @@ class RequestForm extends ContentEntityForm {
         $form['entity'] = $builder->view($this->entity, 'accepted');
         $form['proceed'] = [
           '#type' => 'link',
-          '#url' => Url::fromUri('base:' . $this->entity->path->value),
+          '#url' => Url::fromUri('base:' . $this->entity->request_path->value),
           '#title' => $this->t('Proceed'),
           '#options' => [
             'attributes' => ['class' => ['button']],

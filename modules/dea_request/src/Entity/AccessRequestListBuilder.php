@@ -35,7 +35,7 @@ class AccessRequestListBuilder extends EntityListBuilder {
       $this->t('User'),
       $this->t('Entity'),
       $this->t('Operation'),
-      $this->t('path'),
+      $this->t('Request path'),
       $this->t('Status'),
     ] + parent::buildHeader();
   }
@@ -49,7 +49,7 @@ class AccessRequestListBuilder extends EntityListBuilder {
       $entity->uid->entity->link(),
       $entity->getTarget()->link(),
       $entity->operation->value,
-      $entity->path ? \Drupal::l($entity->path->value, Url::fromUri('base:' . $entity->path->value)) : '',
+      $entity->request_path ? \Drupal::l($entity->request_path->value, Url::fromUri('base:' . $entity->request_path->value)) : '',
       $entity->getReadableStatus(),
     ] + parent::buildRow($entity);
   }
