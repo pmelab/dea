@@ -61,7 +61,7 @@ dea_request.settings:
     _form: '\Drupal\dea_request\Form\SettingsForm'
     _title: 'Dynamic entity access settings'
   requirements:
-    _permission: 'administer account settings'
+    _permission: 'administer users'
 
 dea_request.access_check:
   path: '/dea/check-access'

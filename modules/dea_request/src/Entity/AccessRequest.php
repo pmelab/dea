@@ -27,7 +27,7 @@ use Drupal\user\Entity\User;
  *     "access" = "Drupal\dea_request\Entity\AccessRequestAccessControlHandler",
  *   },
  *   base_table = "dea_request",
- *   admin_permission = "administer account settings",
+ *   admin_permission = "administer users",
  *   fieldable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
